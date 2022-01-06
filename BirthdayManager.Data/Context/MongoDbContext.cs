@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace BirthdayManager.Data
+namespace BirthdayManager.Data.Context
 {
     public class MongoDbContext
     {

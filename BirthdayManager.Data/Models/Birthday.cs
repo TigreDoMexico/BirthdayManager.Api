@@ -12,6 +12,6 @@ namespace BirthdayManager.Data.Models
         [BsonId]
         public string Id { get; set; }
         public int Name { get; set; }
-        public BsonDateTimeOptionsAttribute Date { get; set; }
+        public string Date { get; set; }
     }
 }

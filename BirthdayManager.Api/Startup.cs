@@ -33,6 +33,7 @@ namespace BirthdayManager.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BirthdayManager.Api", Version = "v1" });
             });
             
+            services.AddScoped<ContextDomain>();
             services.AddScoped<BirthdayDomain>();
         }
 
