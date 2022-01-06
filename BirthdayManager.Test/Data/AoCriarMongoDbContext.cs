@@ -1,17 +1,17 @@
 using System.Reflection;
 using System.IO;
-using BirthdayManager.Data;
+using BirthdayManager.Data.Context;
 using Xunit;
 using Newtonsoft.Json;
 using BirthdayManager.Test.Contracts;
 
 namespace BirthdayManager.Test.Data
 {
-    public class AoCriarContext
+    public class AoCriarMongoDbContext
     {
         private EnvironmentData _config;
 
-        public AoCriarContext()
+        public AoCriarMongoDbContext()
         {
             var path = Path.Combine(Path.GetDirectoryName("../../../Data"), "Data/appsettings.json");
             var json = File.ReadAllText(path);
@@ -26,7 +26,7 @@ namespace BirthdayManager.Test.Data
         }
 
         [Fact]
-        public void PassandoConnectionStringDoMongoDbDeveInstanciarContext()
+        public void PassandoConnectionStringDeveInstanciarOBancoDeDados()
         {
             MongoDbContext context = new MongoDbContext(_config.MongoDbConnectionString);
             Assert.NotNull(context.Database);

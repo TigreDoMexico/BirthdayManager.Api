@@ -14,15 +14,35 @@ namespace BirthdayManager.Domain
     {
         private readonly IMongoCollection<Birthday> _birthdays;
 
-        public BirthdayDomain(IConfiguration configuration)
+        public BirthdayDomain(ContextDomain domain)
         {
-            var connectionString = configuration.GetConnectionString("MongoDb");
-            var context = new MongoDbContext(connectionString);
-
-            var db = context.Database.GetDatabase("BirthdayManagerDb");
+            var db = domain.GetDatabase("BirthdayManagerDb");
             _birthdays = db.GetCollection<Birthday>("Birthday");
         }
 
-        public List<Birthday> Get() => _birthdays.Find(book => true).ToList();
+        public List<Birthday> GetAllBirthdays() => _birthdays.Find(book => true).ToList();
+
+        public void AddBirthdayToList()
+        {
+
+        }
+
+        // public Book Get(string id) =>
+        //     _books.Find<Book>(book => book.Id == id).FirstOrDefault();
+
+        // public Book Create(Book book)
+        // {
+        //     _books.InsertOne(book);
+        //     return book;
+        // }
+
+        // public void Update(string id, Book bookIn) =>
+        //     _books.ReplaceOne(book => book.Id == id, bookIn);
+
+        // public void Remove(Book bookIn) =>
+        //     _books.DeleteOne(book => book.Id == bookIn.Id);
+
+        // public void Remove(string id) => 
+        //     _books.DeleteOne(book => book.Id == id);
     }
 }

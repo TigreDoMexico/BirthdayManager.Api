@@ -11,7 +11,7 @@ namespace BirthdayManager.Api.Controllers
     /// Controller de Aniversários
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BirthdayController : ControllerBase
     {
         private readonly BirthdayDomain _domain;
@@ -21,7 +21,17 @@ namespace BirthdayManager.Api.Controllers
             _domain = domain;
         }
 
+        /// <summary>
+        /// Obtém uma lista de aniversários
+        /// </summary>
         [HttpGet]
-        public ActionResult GetAll() => Ok(_domain.Get());        
+        public ActionResult GetAll() => Ok(_domain.GetAllBirthdays());
+
+        [HttpPost]
+        public ActionResult Post()
+        {
+
+            return Ok();
+        }
     }
 }
