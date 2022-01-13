@@ -11,7 +11,7 @@ namespace BirthdayManager.Data.Models
     {
         [BsonId]
         public string Id { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
         public string Date { get; set; }
     }
 }

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BirthdayManager.Data\BirthdayManager.Data.csproj" />
+    <ProjectReference Include="..\BirthdayManager.Domain\BirthdayManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>
