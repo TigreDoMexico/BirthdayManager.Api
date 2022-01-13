@@ -1,5 +1,7 @@
 ﻿using BirthdayManager.Data;
 using BirthdayManager.Data.Models;
+using BirthdayManager.Domain.DTO;
+using BirthdayManager.Domain.Factory;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System;
@@ -16,33 +18,26 @@ namespace BirthdayManager.Domain
 
         public BirthdayDomain(ContextDomain domain)
         {
-            var db = domain.GetDatabase("BirthdayManagerDb");
+            var db = domain.GetDatabase("Birthdays");
             _birthdays = db.GetCollection<Birthday>("Birthday");
         }
 
-        public List<Birthday> GetAllBirthdays() => _birthdays.Find(book => true).ToList();
+        public long CountAllBirthdays() => 
+            _birthdays.CountDocuments(birthday => true);
+        
+        public List<Birthday> GetAllBirthdays() =>
+            _birthdays.Find(birthday => true).ToList();
 
-        public void AddBirthdayToList()
-        {
+        public BirthdayDTO.Get GetBirthday(string id) =>
+            _birthdays.Find(birthday => birthday.Id == id).FirstOrDefault().ToBirthdayDTO();
 
-        }
+        public void AddBirthdayToList(BirthdayDTO.Create birthday) =>        
+            _birthdays.InsertOne(birthday.ToBirthdayData());
+        
+        public void UpdateBirthday(string id, Birthday newData) =>
+            _birthdays.ReplaceOne(birthday => birthday.Id == id, newData);
 
-        // public Book Get(string id) =>
-        //     _books.Find<Book>(book => book.Id == id).FirstOrDefault();
-
-        // public Book Create(Book book)
-        // {
-        //     _books.InsertOne(book);
-        //     return book;
-        // }
-
-        // public void Update(string id, Book bookIn) =>
-        //     _books.ReplaceOne(book => book.Id == id, bookIn);
-
-        // public void Remove(Book bookIn) =>
-        //     _books.DeleteOne(book => book.Id == bookIn.Id);
-
-        // public void Remove(string id) => 
-        //     _books.DeleteOne(book => book.Id == id);
+        public void DeleteBirthday(string id) =>
+            _birthdays.DeleteOne(birthday => birthday.Id == id);
     }
 }
