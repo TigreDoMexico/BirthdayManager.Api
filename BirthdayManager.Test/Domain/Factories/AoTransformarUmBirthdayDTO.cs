@@ -7,16 +7,24 @@ namespace BirthdayManager.Test.Domain.Factories
 {
     public class AoTransformarUmBirthdayDTO
     {
-        public BirthdayDTO.Create actualData = new BirthdayDTO.Create {
-          Name = "Teste",
-          Date = new DateTime(2022, 01, 01)
-        };
+        private int year = 2022;
+        private int month = 5;
+        private int day = 30;
+        private BirthdayDTO.Create actualData;
+
+        public AoTransformarUmBirthdayDTO()
+        {
+            actualData = new BirthdayDTO.Create {
+                Name = "Teste",
+                Date = new DateTime(year, month, day)
+            };
+        }
 
         [Fact]
         public void ParaDataDeveConverterOCampoDateParaOFormatoStringCorreto()
         {
             // Arrange
-            var expectData = "2022-01-01";
+            var expectData = String.Format("{0}-0{1}-{2}", year, month, day);
 
             // Act
             var transformData = actualData.ToBirthdayData();

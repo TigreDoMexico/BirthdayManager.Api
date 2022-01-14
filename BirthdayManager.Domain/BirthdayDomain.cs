@@ -25,17 +25,18 @@ namespace BirthdayManager.Domain
         public long CountAllBirthdays() => 
             _birthdays.CountDocuments(birthday => true);
         
-        public List<Birthday> GetAllBirthdays() =>
-            _birthdays.Find(birthday => true).ToList();
+        public List<BirthdayDTO.Get> GetAllBirthdays() =>
+            _birthdays.Find(birthday => true)
+            .ToEnumerable().ToDTOList();
 
         public BirthdayDTO.Get GetBirthday(string id) =>
             _birthdays.Find(birthday => birthday.Id == id).FirstOrDefault().ToBirthdayDTO();
 
-        public void AddBirthdayToList(BirthdayDTO.Create birthday) =>        
+        public void AddBirthday(BirthdayDTO.Create birthday) =>        
             _birthdays.InsertOne(birthday.ToBirthdayData());
         
-        public void UpdateBirthday(string id, Birthday newData) =>
-            _birthdays.ReplaceOne(birthday => birthday.Id == id, newData);
+        public void UpdateBirthday(string id, BirthdayDTO.Create newData) =>
+            _birthdays.ReplaceOne(birthday => birthday.Id == id, newData.ToBirthdayData());
 
         public void DeleteBirthday(string id) =>
             _birthdays.DeleteOne(birthday => birthday.Id == id);
