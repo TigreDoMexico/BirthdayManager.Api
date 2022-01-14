@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BirthdayManager.Data.Models;
 using BirthdayManager.Domain.DTO;
 
@@ -24,6 +26,9 @@ namespace BirthdayManager.Domain.Factory
             birthdayDto.Date = DateTime.Parse(data.Date);
 
             return birthdayDto;
-        } 
+        }
+
+        public static List<BirthdayDTO.Get> ToDTOList(this IEnumerable<Birthday> listData) =>
+            listData.Select(data => data.ToBirthdayDTO()).ToList();        
     }
 }

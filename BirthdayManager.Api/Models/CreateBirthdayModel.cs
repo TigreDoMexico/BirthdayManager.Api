@@ -2,13 +2,8 @@ using System;
 
 namespace BirthdayManager.Api.Models
 {
-    public class BirthdayViewModel
+    public class CreateBirthdayModel
     {
-        /// <summary>
-        /// Id do registro de aniversário
-        /// </summary>
-        public string Id { get; set; }
-
         /// <summary>
         /// Nome de quem ou do que faz o aniversário
         /// </summary>
@@ -17,6 +12,6 @@ namespace BirthdayManager.Api.Models
         /// <summary>
         /// Data do Aniversário
         /// </summary>
-        public string Data { get; set; }
+        public DateTime Data { get; set; }
     }
 }
