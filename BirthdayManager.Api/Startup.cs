@@ -14,9 +14,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
+using HotChocolate.AspNetCore.Playground;
+using HotChocolate.AspNetCore;
+
 
 namespace BirthdayManager.Api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -38,7 +43,9 @@ namespace BirthdayManager.Api
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 opt.IncludeXmlComments(xmlPath);
             });
-            
+
+            services.AddGraphQLServer();
+
             services.AddScoped<ContextDomain>();
             services.AddScoped<BirthdayDomain>();
         }
@@ -51,6 +58,12 @@ namespace BirthdayManager.Api
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BirthdayManager.Api v1"));
+
+                app.UsePlayground(new PlaygroundOptions
+                {
+                    QueryPath = "/api",
+                    Path = "/playground"
+                });
             }
 
             // app.UseHttpsRedirection();
@@ -62,6 +75,7 @@ namespace BirthdayManager.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGraphQL();
             });
         }
 
