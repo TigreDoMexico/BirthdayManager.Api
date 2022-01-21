@@ -6,15 +6,17 @@ namespace BirthdayManager.Domain
 {
     public class ContextDomain
     {
-        private readonly MongoDbContext _context;
+        private readonly MongoBirthdayDbContext _context;
 
         public ContextDomain(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("MongoDb");
-            _context = new MongoDbContext(connectionString);
+            var connectionString = configuration.GetSection("MongoSettings:ConnectionStrings").ToString();
+            var databaseName = configuration.GetSection("MongoSettings:DatabaseName").ToString();
+
+            _context = new MongoBirthdayDbContext(connectionString, databaseName);
         }
 
         public IMongoDatabase GetDatabase(string dbName) =>
-            _context.Database.GetDatabase(dbName);
+            _context.Database;
     }
 }
