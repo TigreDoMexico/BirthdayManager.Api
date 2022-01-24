@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace BirthdayManager.Api.Controllers
 {
     /// <summary>
-    /// Controller de Aniversários
+    /// Controller de registros de Aniversários
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
@@ -15,6 +15,10 @@ namespace BirthdayManager.Api.Controllers
     {
         private readonly BirthdayDomain _domain;
 
+        /// <summary>
+        /// Construtor da Controller
+        /// </summary>
+        /// <param name="domain">Domínio de Aniversário</param>
         public BirthdayController(BirthdayDomain domain)
         {
             _domain = domain;
@@ -37,7 +41,7 @@ namespace BirthdayManager.Api.Controllers
         /// <summary>
         /// Obtém um registro de aniversário pelo Id
         /// </summary>
-        [HttpGet("{id:string}")]
+        [HttpGet("{id}")]
         public ActionResult<BirthdayModel> GetById(string id) =>
             Ok(_domain.GetBirthday(id).ToModel());
 
@@ -54,7 +58,7 @@ namespace BirthdayManager.Api.Controllers
         /// <summary>
         /// Atualiza um registro de aniversário pelo Id
         /// </summary>
-        [HttpPut("{id:string}")]
+        [HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] CreateBirthdayModel data)
         {
             _domain.UpdateBirthday(id, data.ToDTO());
@@ -64,7 +68,7 @@ namespace BirthdayManager.Api.Controllers
         /// <summary>
         /// Deleta um registro de aniversário pelo Id
         /// </summary>
-        [HttpDelete("{id:string}")]
+        [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
             _domain.DeleteBirthday(id);

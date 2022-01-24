@@ -21,17 +21,29 @@ using HotChocolate.AspNetCore;
 
 namespace BirthdayManager.Api
 {
+    /// <summary>
+    /// Classe Startup da API
+    /// </summary>
     [ExcludeFromCodeCoverage]
     public class Startup
     {
+        /// <summary>
+        /// Construtor da Classe
+        /// </summary>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Configurações do appsettings.json
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container. 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -50,7 +62,11 @@ namespace BirthdayManager.Api
             services.AddScoped<BirthdayDomain>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -60,8 +76,7 @@ namespace BirthdayManager.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BirthdayManager.Api v1"));
 
                 app.UsePlayground(new PlaygroundOptions
-                {
-                    QueryPath = "/api",
+                {   
                     Path = "/playground"
                 });
             }

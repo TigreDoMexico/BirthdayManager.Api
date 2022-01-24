@@ -2,6 +2,9 @@ using System;
 
 namespace BirthdayManager.Api.Models
 {
+    /// <summary>
+    /// Classe Model para Criação de um Registro de Aniversário
+    /// </summary>
     public class CreateBirthdayModel
     {
         /// <summary>

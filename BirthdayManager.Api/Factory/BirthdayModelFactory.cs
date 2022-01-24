@@ -5,8 +5,16 @@ using System.Linq;
 
 namespace BirthdayManager.Api.Factory
 {
+    /// <summary>
+    /// Classe responsável por converter dados de dentro da API para o Domain e vice-versa
+    /// </summary>
     public static class BirthdayModelFactory
     {
+        /// <summary>
+        /// Transforma um DTO de Aniversário em um Model para retornar para a View
+        /// </summary>
+        /// <param name="data">Dados vindos do Domain em formato DTO</param>
+        /// <returns>Dados convertidos em Model</returns>
         public static BirthdayModel ToModel(this BirthdayDTO.Get data)
         {
             var model = new BirthdayModel
@@ -19,9 +27,19 @@ namespace BirthdayManager.Api.Factory
             return model;
         }
 
+        /// <summary>
+        /// Transforma uma lista de DTO de Aniversário em um Model para retornar para a View
+        /// </summary>
+        /// <param name="listData">Lista de Dados vindos do Domain em formato DTO</param>
+        /// <returns>Lista de Dados convertidos em Model</returns>
         public static List<BirthdayModel> ToModel(this List<BirthdayDTO.Get> listData) =>
             listData.Select(data => data.ToModel()).ToList();
 
+        /// <summary>
+        /// Transforma os dados de Criação do Model em um DTO para enviar para o Domain
+        /// </summary>
+        /// <param name="model">Dados de Criação vindos do Model</param>
+        /// <returns>Dados convertidos em um DTO de Criação</returns>
         public static BirthdayDTO.Create ToDTO(this CreateBirthdayModel model)
         {
             var dto = new BirthdayDTO.Create
