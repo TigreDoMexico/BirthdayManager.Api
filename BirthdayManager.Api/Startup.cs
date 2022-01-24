@@ -17,7 +17,7 @@ using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using HotChocolate.AspNetCore.Playground;
 using HotChocolate.AspNetCore;
-
+using BirthdayManager.Api.DataAccess;
 
 namespace BirthdayManager.Api
 {
@@ -56,10 +56,18 @@ namespace BirthdayManager.Api
                 opt.IncludeXmlComments(xmlPath);
             });
 
-            services.AddGraphQLServer();
+            services.AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
+                .AddSubscriptionType<Subscription>();
 
-            services.AddScoped<ContextDomain>();
             services.AddScoped<BirthdayDomain>();
+
+            services.AddCors(option => {
+                option.AddPolicy("allowedOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                    );
+            });
         }
 
         /// <summary>
@@ -74,16 +82,13 @@ namespace BirthdayManager.Api
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BirthdayManager.Api v1"));
-
-                app.UsePlayground(new PlaygroundOptions
-                {   
-                    Path = "/playground"
-                });
             }
 
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(opt => opt.AllowAnyOrigin());
 
             // app.UseAuthorization();
 

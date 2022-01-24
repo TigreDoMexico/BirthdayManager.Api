@@ -19,11 +19,14 @@ namespace BirthdayManager.Domain.Factory
 
         public static BirthdayDTO.Get ToBirthdayDTO(this Birthday data)
         {
-            var birthdayDto = new BirthdayDTO.Get();
+            if(data == null) return null;
 
-            birthdayDto.Id = data.Id;
-            birthdayDto.Name = data.Name;
-            birthdayDto.Date = DateTime.Parse(data.Date);
+            var birthdayDto = new BirthdayDTO.Get
+            {
+                Id = data.Id,
+                Name = data.Name,
+                Date = DateTime.Parse(data.Date)
+            };
 
             return birthdayDto;
         }

@@ -17,6 +17,8 @@ namespace BirthdayManager.Api.Factory
         /// <returns>Dados convertidos em Model</returns>
         public static BirthdayModel ToModel(this BirthdayDTO.Get data)
         {
+            if(data == null) return null;
+
             var model = new BirthdayModel
             {
                 Id = data.Id,
