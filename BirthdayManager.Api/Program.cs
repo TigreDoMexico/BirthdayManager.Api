@@ -15,7 +15,7 @@ namespace BirthdayManager.Api
     public class Program
     {
         /// <summary>
-        /// Método Main da API
+        /// Mï¿½todo Main da API
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
@@ -24,7 +24,7 @@ namespace BirthdayManager.Api
         }
 
         /// <summary>
-        /// Método para Criar um HostBuilder
+        /// Mï¿½todo para Criar um HostBuilder
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>

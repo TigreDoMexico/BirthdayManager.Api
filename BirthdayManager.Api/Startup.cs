@@ -36,7 +36,7 @@ namespace BirthdayManager.Api
         }
 
         /// <summary>
-        /// Configurações do appsettings.json
+        /// Configuraï¿½ï¿½es do appsettings.json
         /// </summary>
         public IConfiguration Configuration { get; }
 
