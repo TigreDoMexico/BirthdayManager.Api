@@ -9,13 +9,25 @@ using Microsoft.Extensions.Logging;
 
 namespace BirthdayManager.Api
 {
+    /// <summary>
+    /// Classe Program da API
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// M�todo Main da API
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        /// M�todo para Criar um HostBuilder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>

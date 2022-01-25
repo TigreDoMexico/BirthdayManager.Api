@@ -1,4 +1,5 @@
 ﻿using BirthdayManager.Data;
+using BirthdayManager.Data.DAO;
 using BirthdayManager.Data.Models;
 using BirthdayManager.Domain.DTO;
 using BirthdayManager.Domain.Factory;
@@ -14,31 +15,33 @@ namespace BirthdayManager.Domain
 {
     public class BirthdayDomain
     {
-        private readonly IMongoCollection<Birthday> _birthdays;
+        private readonly BirthdayRepository _repository;
 
-        public BirthdayDomain(ContextDomain domain)
+        public BirthdayDomain(IConfiguration configuration)
         {
-            var db = domain.GetDatabase("Birthdays");
-            _birthdays = db.GetCollection<Birthday>("Birthday");
+            _repository = new BirthdayRepository(configuration);
         }
 
-        public long CountAllBirthdays() => 
-            _birthdays.CountDocuments(birthday => true);
-        
+        #region Repository Methods
+
+        public long CountAllBirthdays() =>
+            _repository.Count();
+
         public List<BirthdayDTO.Get> GetAllBirthdays() =>
-            _birthdays.Find(birthday => true)
-            .ToEnumerable().ToDTOList();
+            _repository.GetAll().ToDTOList();
 
         public BirthdayDTO.Get GetBirthday(string id) =>
-            _birthdays.Find(birthday => birthday.Id == id).FirstOrDefault().ToBirthdayDTO();
+            _repository.GetById(id).ToBirthdayDTO();
 
-        public void AddBirthday(BirthdayDTO.Create birthday) =>        
-            _birthdays.InsertOne(birthday.ToBirthdayData());
-        
+        public void AddBirthday(BirthdayDTO.Create birthday) =>
+            _repository.Add(birthday.ToBirthdayData());
+
         public void UpdateBirthday(string id, BirthdayDTO.Create newData) =>
-            _birthdays.ReplaceOne(birthday => birthday.Id == id, newData.ToBirthdayData());
+            _repository.Update(newData.ToBirthdayData(), id);
 
         public void DeleteBirthday(string id) =>
-            _birthdays.DeleteOne(birthday => birthday.Id == id);
+            _repository.Delete(id);
+
+        #endregion
     }
 }

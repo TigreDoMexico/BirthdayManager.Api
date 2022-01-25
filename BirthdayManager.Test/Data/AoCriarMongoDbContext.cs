@@ -23,12 +23,13 @@ namespace BirthdayManager.Test.Data
         {
             Assert.NotNull(_config);
             Assert.False(string.IsNullOrEmpty(_config.MongoDbConnectionString));
+            Assert.False(string.IsNullOrEmpty(_config.MongoDbDatabase));
         }
 
         [Fact]
         public void PassandoConnectionStringDeveInstanciarOBancoDeDados()
         {
-            MongoDbContext context = new MongoDbContext(_config.MongoDbConnectionString);
+            var context = new MongoBirthdayDbContext(_config.MongoDbConnectionString, _config.MongoDbDatabase);
             Assert.NotNull(context.Database);
         }
     }

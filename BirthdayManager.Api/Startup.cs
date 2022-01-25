@@ -14,19 +14,36 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
+using HotChocolate.AspNetCore.Playground;
+using HotChocolate.AspNetCore;
+using BirthdayManager.Api.DataAccess;
 
 namespace BirthdayManager.Api
 {
+    /// <summary>
+    /// Classe Startup da API
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
+        /// <summary>
+        /// Construtor da Classe
+        /// </summary>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Configura��es do appsettings.json
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container. 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -38,12 +55,26 @@ namespace BirthdayManager.Api
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 opt.IncludeXmlComments(xmlPath);
             });
-            
-            services.AddScoped<ContextDomain>();
+
+            services.AddGraphQLServer()
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
+                .AddSubscriptionType<Subscription>();
+
             services.AddScoped<BirthdayDomain>();
+
+            services.AddCors(option => {
+                option.AddPolicy("allowedOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                    );
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -57,11 +88,14 @@ namespace BirthdayManager.Api
 
             app.UseRouting();
 
+            app.UseCors(opt => opt.AllowAnyOrigin());
+
             // app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGraphQL();
             });
         }
 

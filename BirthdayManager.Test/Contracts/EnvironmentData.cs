@@ -9,5 +9,6 @@ namespace BirthdayManager.Test.Contracts
     public class EnvironmentData
     {
         public string MongoDbConnectionString { get; set; }
+        public string MongoDbDatabase { get; set; }
     }
 }
