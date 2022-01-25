@@ -1,4 +1,6 @@
 ﻿using BirthdayManager.Data.Context;
+using BirthdayManager.Data.Context.Contract;
+using BirthdayManager.Data.DAO.Contract;
 using BirthdayManager.Data.Models;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
@@ -10,18 +12,23 @@ using System.Threading.Tasks;
 
 namespace BirthdayManager.Data.DAO
 {
-    public class BirthdayRepository
+    public class BirthdayRepository : IRepository<Birthday>
     {
-        private MongoBirthdayDbContext _context;
+        private const string COLLECTION_NAME = "Birthday";
+
+        private IMongoBirthdayDbContext _context;
         private IMongoCollection<Birthday> _collection;
 
         public BirthdayRepository(IConfiguration configuration)
         {
-            var connectionString = configuration.GetSection("MongoSettings:ConnectionStrings").Value;
-            var databaseName = configuration.GetSection("MongoSettings:DatabaseName").Value;
+            _context = new MongoBirthdayDbContext(configuration);
+            _collection = _context.GetCollection<Birthday>(COLLECTION_NAME);
+        }
 
-            _context = new MongoBirthdayDbContext(connectionString, databaseName);
-            _collection = _context.GetCollection<Birthday>("Birthday");
+        public BirthdayRepository(IMongoBirthdayDbContext context)
+        {
+            _context = context;
+            _collection = _context.GetCollection<Birthday>(COLLECTION_NAME);
         }
 
         public IMongoCollection<Birthday> GetCollection() =>

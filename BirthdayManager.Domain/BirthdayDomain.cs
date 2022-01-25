@@ -1,5 +1,6 @@
 ﻿using BirthdayManager.Data;
 using BirthdayManager.Data.DAO;
+using BirthdayManager.Data.DAO.Contract;
 using BirthdayManager.Data.Models;
 using BirthdayManager.Domain.DTO;
 using BirthdayManager.Domain.Factory;
@@ -20,6 +21,11 @@ namespace BirthdayManager.Domain
         public BirthdayDomain(IConfiguration configuration)
         {
             _repository = new BirthdayRepository(configuration);
+        }
+
+        public BirthdayDomain(IRepository<Birthday> repository)
+        {
+            _repository = repository as BirthdayRepository;
         }
 
         #region Repository Methods

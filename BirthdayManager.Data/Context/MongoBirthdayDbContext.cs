@@ -1,4 +1,5 @@
 ﻿using BirthdayManager.Data.Context.Contract;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ namespace BirthdayManager.Data.Context
         public IClientSessionHandle Session { get; set; }
         public IMongoDatabase Database { get { return _db; } }
 
-        public MongoBirthdayDbContext(string connection, string database)
+        public MongoBirthdayDbContext(IConfiguration configuration)
         {
-            _client = new MongoClient(connection);
-            _db = _client.GetDatabase(database);
+            var connectionString = configuration.GetSection("MongoSettings:ConnectionStrings").Value;
+            var databaseName = configuration.GetSection("MongoSettings:DatabaseName").Value;
+
+            _client = new MongoClient(connectionString);
+            _db = _client.GetDatabase(databaseName);
         }
 
         public IMongoCollection<T> GetCollection<T>(string name) =>

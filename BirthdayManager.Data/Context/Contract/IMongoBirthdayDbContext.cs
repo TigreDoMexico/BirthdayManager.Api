@@ -1,8 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using BirthdayManager.Data.Models;
+using MongoDB.Driver;
 
 namespace BirthdayManager.Data.Context.Contract
 {
-    internal interface IMongoBirthdayDbContext
+    public interface IMongoBirthdayDbContext
     {
         IMongoCollection<T> GetCollection<T>(string name);
     }
