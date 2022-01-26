@@ -1,11 +1,13 @@
 ﻿using BirthdayManager.Data.Context.Contract;
 using BirthdayManager.Data.DAO;
 using BirthdayManager.Data.Models;
+using BirthdayManager.Test.Data.Mock;
 using BirthdayManager.Test.Data.Mock.Contract;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Moq;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,36 +18,46 @@ namespace BirthdayManager.Test.Data
     public class AoInstanciarBirthdayRepository
     {
         private Mock<IMongoBirthdayDbContext> mockContext = new Mock<IMongoBirthdayDbContext>();
-        private Mock<IMongoCollection<Birthday>> mockCollection = new Mock<IMongoCollection<Birthday>>();
+        private BirthdayCollectionMock mockBirthdayCollection = new BirthdayCollectionMock();
 
-        public AoInstanciarBirthdayRepository()
+        [Fact]
+        public void Deve_RetornarOTotalCorretoDeAniversarios_Quando_ChamadoOMetodoCount()
         {
-
-
-            mockCollection.Setup(collection => collection
-                .CountDocuments(It.IsAny<FilterDefinition<Birthday>>(), null, default))
-                    .Returns((long) 5);
-
-            //mockCollection.Setup(collection => collection
-            //    .Find(It.Is<FilterDefinition<Birthday>>(birthday => true), null))
-            //        .Returns(1);
+            // ARRANGE
+            mockBirthdayCollection.SetupCountDocuments();
 
             mockContext.Setup(context => context
                 .GetCollection<Birthday>(It.IsAny<string>()))
-                    .Returns(mockCollection.Object);
-        }
+                    .Returns(mockBirthdayCollection.Mock.Object);
 
-        [Fact]
-        public void Deve_RetornarOValorCorretoDeDocumentos_Quando_ChamadoOMetodoDeCountDocuments()
-        {
-            // ARRANGE
             var repository = new BirthdayRepository(mockContext.Object);
 
             // ACT
             var result = repository.Count();
 
             // ASSERT
-            Assert.Equal((long) 5, result);
+            Assert.Equal((long) mockBirthdayCollection.FakeData.Count(), result);
+        }
+
+        [Fact]
+        public void Deve_RetornarUmaListaDeAniversarios_Quando_ChamadoOMetodoGetAll()
+        {
+            // ARRANGE
+            mockBirthdayCollection.SetupFind();
+
+            mockContext.Setup(context => context
+                .GetCollection<Birthday>(It.IsAny<string>()))
+                    .Returns(mockBirthdayCollection.Mock.Object);
+
+            var repository = new BirthdayRepository(mockContext.Object);
+
+            // ACT
+            var result = repository.GetAll().ToList();
+
+            // ASSERT
+            Assert.NotNull(result);
+            Assert.Equal(mockBirthdayCollection.FakeData.Count(), result.Count());
+            Assert.Equal(mockBirthdayCollection.FakeData.FirstOrDefault().Id, result.FirstOrDefault().Id);
         }
 
     }

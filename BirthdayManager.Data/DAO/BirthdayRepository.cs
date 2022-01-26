@@ -35,10 +35,10 @@ namespace BirthdayManager.Data.DAO
             _collection;
 
         public IEnumerable<Birthday> GetAll() =>
-            _collection.Find(data => true).ToEnumerable();
+            _collection.Find(Builders<Birthday>.Filter.Empty).ToEnumerable();
 
         public long Count() =>
-            _collection.CountDocuments(birthday => true);
+            _collection.CountDocuments(Builders<Birthday>.Filter.Empty);
 
         public Birthday GetById(string id) =>
             _collection.Find(data => data.Id == id).FirstOrDefault();
